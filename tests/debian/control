@@ -1,0 +1,19 @@
+Source: test-package
+Section: unknown
+Priority: extra
+Maintainer: Somebody <somebody@dev>
+Build-Depends: debhelper(>=7),
+               g++
+Standards-Version: 3.7.2
+
+Package: test-package0
+Provides: test-package
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Test package 
+
+Package: test-package-dev
+Architecture: any
+Depends: test-package0(=${binary:Version})
+Description: Test package - development files
+

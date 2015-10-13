@@ -1,0 +1,5 @@
+test-package (1.0.0) stable; urgency=medium
+
+  * Initial release.
+
+ -- somebody <somebody@dev>  Tue, 13 Oct 2015 09:26:45 +0200

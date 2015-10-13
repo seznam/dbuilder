@@ -1,0 +1,6 @@
+dockerfiles/*
+
+*.pyc
+
+tests/debian/*
+*.deb
