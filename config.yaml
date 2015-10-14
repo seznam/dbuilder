@@ -4,7 +4,7 @@ dbuilder-namespace-mapping:
 packages:
   debian:
     templates:
-      - {file: apt_based.dockerfile, tags: [wheezy, 7, jessie, 8, latest]}
+      - {file: apt_based.dockerfile, tags: [wheezy, 7, jessie, jessie-backports, 8, latest]}
 
   ubuntu:
     templates:
