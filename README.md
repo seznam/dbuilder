@@ -7,7 +7,7 @@ All images are available on docker hub https://hub.docker.com/r/seznam/dbuilder/
 The only thing you have to do is to choose a tag (generated from config.yaml) e.g. 'jessie_latest' and run:
 (Docker will automatically pull that image so you don't neet to build anything)
 ```bash
-docker run -it --rm -v `pwd`:/dbuilder/sources seznam/dbuilder:debian_jessie
+docker run --rm -v `pwd`:/dbuilder/sources seznam/dbuilder:debian_jessie
 ```
 and *.deb will appear in your source directory
 
