@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-cp -r /dbuilder/sources/* -t /dbuilder/build/
+cp -r /dbuilder/sources/. -t /dbuilder/build/
 cd /dbuilder/build/${DBUILDER_SUBDIR}
 
 apt-get update
