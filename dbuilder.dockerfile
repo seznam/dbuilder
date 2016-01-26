@@ -5,7 +5,7 @@ FROM {{ name }}:{{ tag }}
 RUN apt-get update && \
 echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/10no-recommends && \
 echo 'APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/10no-suggests && \
-apt-get install -y equivs devscripts
+apt-get install -y equivs devscripts dpkg-dev
 
 {%- block volumes %}
 VOLUME /dbuilder/bin/

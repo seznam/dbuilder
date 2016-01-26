@@ -11,13 +11,32 @@ docker run --rm -v `pwd`:/dbuilder/sources seznam/dbuilder:debian_jessie
 ```
 and *.deb will appear in your source directory
 
+### Optional arguments
+  - **Additional packages** - It is possible to add additional packages to dbuilder and it will create local repository containing these files. Note the volume `/dbuilder/additional_packages` in the following example. Note, that this feature is implemented in apt-based dbuilder images only now.
+
+```bash
+# add some package
+cp mypackage_1.0.9.8.2_amd64.deb ./deps/
+# add another package, note that the deb package can be located
+# in any subdirectory
+mkdir ./deps/otherpackage_subdir/
+cp otherpackage_0.22.4_all.deb ./deps/otherpackage_subdir/
+
+# build and possibly use additional packages
+docker run --rm \
+    -v `pwd`/deps:/dbuilder/additional_packages \
+    -v `pwd`/src:/dbuilder/sources \
+    seznam/dbuilder:debian_jessie
+```
+
 ### Control environment variables
   - general
     - DBUILDER_SUBDIR - cd to subdir before building starts
     - NCPUS - concurrency
-  
+
   - apt based:
     - DBUILDER_BUILD_CMD - [default="dpkg-buildpackage -j${NCPUS}"]
+    - LOCAL_REPO_PRIORITY - sets [Pin-Priority](https://wiki.debian.org/AptPreferences) to local repository created using /dbuilder/additional_packages volume.
 
 ## For maintaners
 ## Prepare
