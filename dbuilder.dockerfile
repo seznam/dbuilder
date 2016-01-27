@@ -2,6 +2,8 @@
 FROM {{ name }}:{{ tag }}
 {% endblock %}
 
+RUN bash -c "mkdir -p /dbuilder/{additional_packages,bin,sources,build}/"
+
 RUN apt-get update && \
 echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/10no-recommends && \
 echo 'APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/10no-suggests && \
