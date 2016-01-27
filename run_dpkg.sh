@@ -27,6 +27,14 @@ unset preinstall_debs
 
 apt-get update
 
+# preinstall hooks
+if [ -d /dbuilder/preinstall.d ]; then
+    for file in `find /dbuilder/preinstall.d -executable -type f | sort -n`; do
+        ${file}
+    done
+    unset file
+fi
+
 mk-build-deps -i -r -t 'apt-get -f -y --force-yes'
 ${DBUILDER_BUILD_CMD}
 
