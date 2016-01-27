@@ -29,6 +29,17 @@ docker run --rm \
     seznam/dbuilder:debian_jessie
 ```
 
+  - **Preinstall hooks** - It is possible to add hooks, before dbuilder tries to satisfy build dependencies. Use volume `/dbuilder/preinstall.d` and drop executable files in. All executable files from this folder will be executed in order determined by numeric `sort`.
+
+```bash
+cp 00-my-fixer.sh 10-prepare-environment.py ./preinstall.d/
+chmod +x ./preinstall.d/*
+docker run --rm \
+    -v `pwd`/preinstall.d:/dbuilder/preinstall.d \
+    -v `pwd`/src:/dbuilder/sources \
+    seznam/dbuilder:debian_jessie
+```
+
 ### Control environment variables
   - general
     - DBUILDER_SUBDIR - cd to subdir before building starts
