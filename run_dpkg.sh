@@ -11,7 +11,9 @@ if [ -n "${preinstall_debs}" ]; then
     repo_path=/dbuilder/local_repository
     mkdir ${repo_path}
     cp ${preinstall_debs} ${repo_path}
-    dpkg-scanpackages ${repo_path} > ${repo_path}/Packages
+    pushd ${repo_path}
+    dpkg-scanpackages . > Packages
+    popd
     echo "deb file:${repo_path} ./" > /etc/apt/sources.list.d/local_repo.list
 
     # if pin-priority is defined, propagate it
