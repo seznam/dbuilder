@@ -158,7 +158,7 @@ def generate_dockerfiles(output_dir, configuration_files):
             for repository_identifier, settings in config['packages'].items():
                 repository = Repository(repository_identifier)
                 if not repository.host:
-                    repository.host = 'registry.hub.docker.com'
+                    repository.host = 'docker.io'
 
                 if repository.host in dbuilder_namespace_mapping:
                     dbuilder_namespace = dbuilder_namespace_mapping[repository.host]
@@ -207,7 +207,7 @@ def generate_dockerfiles(output_dir, configuration_files):
 
                         # Docker hub is special so you cannot use it's hostname
                         # as with other repositories or push will fail
-                        docker_tag = docker_tag.replace('registry.hub.docker.com/', '')
+                        docker_tag = docker_tag.replace('docker.io/', '')
                         # Docker at local machine differentiates between library/<name> and <name>
                         # so we will simplify it
                         docker_tag = docker_tag.replace('library/', '')
