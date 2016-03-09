@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-
+import requests
+import json
 
 def get_repository_tags(url):
-    import requests
-    import json
 
     response = requests.get(url)
     response.raise_for_status()
@@ -11,6 +10,63 @@ def get_repository_tags(url):
 
     return list(tags.keys())
 
+class Registry:
+    url = None
+    version = None
+    verify_certs = True
+
+    def __init__(self, registry_url, verify_certs=True):
+        self.url = registry_url
+        self.verify_certs = verify_certs
+
+    def __repr__(self):
+        return "<Registry ({}) {}>".format(self.version, self.url)
+
+    def get_tags(self, repository):
+        raise NotImplementedError()
+
+    @classmethod
+    def create(cls, registry_url, verify_certs=True):
+        version_lookup = [
+            {"class": Registry_v2, "url": "https://{}/v2/"},
+            {"class": Registry_v1, "url": "https://{}/v1/_ping"},
+        ]
+
+        for version in version_lookup:
+            url = version["url"].format(registry_url)
+            response = requests.get(url, verify=verify_certs)
+            if response.status_code == 200:
+                return version["class"](registry_url, verify_certs)
+
+        return NotImplemented("registry not recognized")
+
+
+class Registry_v1(Registry):
+
+    def __init__(self, registry_url, verify_certs):
+        Registry.__init__(self, registry_url, verify_certs)
+        self.version = "v1"
+
+    def get_tags(self, repo):
+        url = "https://{}/v1/repositories/{}/tags".format(self.url, repo)
+        response = requests.get(url, verify=self.verify_certs)
+        response.raise_for_status()
+        tags = json.loads(response.text)
+
+        return list(tags.keys())
+
+class Registry_v2(Registry):
+
+    def __init__(self, registry_url, verify_certs):
+        Registry.__init__(self, registry_url, verify_certs)
+        self.version = "v2"
+
+    def get_tags(self, repo):
+        url = "https://{}/v2/{}/tags/list".format(self.url, repo)
+        response = requests.get(url, verify=self.verify_certs)
+        response.raise_for_status()
+        tags = json.loads(response.text)["tags"]
+        return tags
 
 class Repository:
     host = ''
@@ -165,9 +221,6 @@ def generate_dockerfiles(output_dir, configuration_files):
                 else:
                     dbuilder_namespace = 'library'
 
-
-                url = 'https://{}/v1/repositories/{}/tags'.format(repository.host, repository.get_image_full_name())
-
                 name = repository.name if repository.namespace == '' else repository.namespace + '__' + repository.name
 
                 docker_tag_repo = repository.get_host_prefix() + dbuilder_namespace + '/dbuilder'
@@ -182,7 +235,8 @@ def generate_dockerfiles(output_dir, configuration_files):
                     tags = template_settings['tags']
                     if isinstance(tags, str):
                         if tags.lower() == 'all':
-                            tags = get_repository_tags(url)
+                            registry = Registry.create(repository.host)
+                            tags = registry.get_tags(repository.get_image_full_name())
 
                     suffix = '_' + template_settings['suffix'] if 'suffix' in template_settings else ''
                     jinja_env = template_settings['jinja_env'] if 'jinja_env' in template_settings else {}
