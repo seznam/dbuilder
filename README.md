@@ -52,7 +52,7 @@ docker run --rm \
 ## For maintaners
 ## Prepare
 ```bash
-./generate-dockerfiles.py
+./generate_dockerfiles.py
 ```
 
 ## Build
