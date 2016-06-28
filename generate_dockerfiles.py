@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import requests
 import json
+import os
 
 def get_repository_tags(url):
 
@@ -9,6 +10,9 @@ def get_repository_tags(url):
     tags = json.loads(response.text)
 
     return list(tags.keys())
+
+def str2bool(arg):
+    return arg.lower() in ["true", "1", "yes"]
 
 class Registry:
     url = None
@@ -235,7 +239,8 @@ def generate_dockerfiles(output_dir, configuration_files):
                     tags = template_settings['tags']
                     if isinstance(tags, str):
                         if tags.lower() == 'all':
-                            registry = Registry.create(repository.host)
+                            verify_certs = str2bool(os.getenv('VERIFY_CERTS', '1'))
+                            registry = Registry.create(repository.host, verify_certs)
                             tags = registry.get_tags(repository.get_image_full_name())
 
                     suffix = '_' + template_settings['suffix'] if 'suffix' in template_settings else ''
