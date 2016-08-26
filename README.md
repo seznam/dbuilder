@@ -40,6 +40,17 @@ docker run --rm \
     seznam/dbuilder:debian_jessie
 ```
 
+  - **Postinstall hooks** - It is possible to add hooks, after build package. Use volume `/dbuilder/postinstall.d` and drop executable files in. All executable files from this folder will be executed in order determined by numeric `sort`.
+
+```bash
+cp 00-post-builder.sh 10-post-script.py ./preinstall.d/
+chmod +x ./postinstall.d/*
+docker run --rm \
+    -v `pwd`/postinstall.d:/dbuilder/postinstall.d \
+    -v `pwd`/src:/dbuilder/sources \
+    seznam/dbuilder:debian_jessie
+```
+
 ### Control environment variables
   - general
     - DBUILDER_SUBDIR - cd to subdir before building starts
@@ -48,6 +59,7 @@ docker run --rm \
   - apt based:
     - DBUILDER_BUILD_CMD - [default="dpkg-buildpackage -j${NCPUS}"]
     - LOCAL_REPO_PRIORITY - sets [Pin-Priority](https://wiki.debian.org/AptPreferences) to local repository created using /dbuilder/additional_packages volume.
+    - BUILD_PACKAGES_FILE_PATH - [default="../"]
 
 ## For maintaners
 ## Prepare

@@ -10,6 +10,7 @@ rm -rf /var/lib/apt/lists/*
 
 {%- block custom %}
 ENV DBUILDER_BUILD_CMD="dpkg-buildpackage -j${NCPUS}"
+ENV BUILD_PACKAGES_FILE_PATH="../"
 
 {%- if 'preinstall_packages' in jinja_env %}
 RUN apt-get update && \

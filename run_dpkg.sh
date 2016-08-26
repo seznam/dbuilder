@@ -38,5 +38,13 @@ fi
 mk-build-deps -i -r -t 'apt-get -f -y --force-yes'
 ${DBUILDER_BUILD_CMD}
 
-chmod 644 ../*.deb
-cp ../*.deb /dbuilder/sources/${DBUILDER_SUBDIR}
+# postinstall hooks
+if [ -d /dbuilder/postinstall.d ]; then
+    for file in `find /dbuilder/postinstall.d -executable -type f | sort -n`; do
+        ${file}
+    done
+    unset file
+fi
+
+chmod 644 ${BUILD_PACKAGES_FILE_PATH}*.deb
+cp ${BUILD_PACKAGES_FILE_PATH}*.deb /dbuilder/sources/${DBUILDER_SUBDIR}
