@@ -202,7 +202,7 @@ def generate_dockerfiles(output_dir, configuration_files):
                 "all: build\n\t\n"
                 ".PHONY: build push all\n"
                 "DOCKER_PUSH_CMD :=docker push\n"
-                "DOCKER_BUILD_CMD :=docker build --pull --no-cache\n"
+                "DOCKER_BUILD_CMD :=docker build --pull --no-cache --build-arg build_date=$(shell date --iso-8601=seconds) --build-arg vcs_ref=$(shell git describe --always  --dirty='.m')\n"
                 "DOCKER_BUILD_CONTEXT :=../\n\n\n")
 
     processed_names = {}
