@@ -189,7 +189,7 @@ def convert_docker_tag_to_makefile_target(docker_tag):
     return docker_tag.replace('/', '__').replace(':', '~')
 
 
-def generate_dockerfiles(output_dir, configuration_files, tag_separator):
+def generate_dockerfiles(output_dir, configuration_files, tag_separator="_"):
     import os
     import yaml
     import jinja2
