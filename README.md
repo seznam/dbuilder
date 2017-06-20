@@ -88,5 +88,8 @@ Options:
                         Configuration file path [config.yaml]
   -o OUTPUT_DIR, --output-dir=OUTPUT_DIR
                         Output directory [./dockerfiles/]
+  -t TAG_SEPARATOR, --tag-separator=TAG_SEPARATOR
+                        Separator of a docker image name and tags which will
+                        used to separate output docker image names[_]
 ```
 All relative paths in configuration file are taken to dirname(configuration file).

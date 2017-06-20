@@ -189,7 +189,7 @@ def convert_docker_tag_to_makefile_target(docker_tag):
     return docker_tag.replace('/', '__').replace(':', '~')
 
 
-def generate_dockerfiles(output_dir, configuration_files):
+def generate_dockerfiles(output_dir, configuration_files, tag_separator="_"):
     import os
     import yaml
     import jinja2
@@ -257,7 +257,7 @@ def generate_dockerfiles(output_dir, configuration_files):
 
                         dockerfile_data = template.render(name=repository.get_image_path(), tag=tag, jinja_env=jinja_env)
 
-                        docker_tag = docker_tag_name + '_' + str(tag)
+                        docker_tag = docker_tag_name + tag_separator + str(tag)
 
                         makefile_target = convert_docker_tag_to_makefile_target(docker_tag)
                         tag_group.append(makefile_target)
@@ -313,10 +313,12 @@ def main():
                       help="Configuration file path [%default]")
     parser.add_option('-o', '--output-dir', dest='output_dir', default='./dockerfiles/',
                       help="Output directory [%default]")
+    parser.add_option('-t', '--tag-separator', dest='tag_separator', default='_',
+                      help="Separator of a docker image name and tags which will used to separate output docker image names[%default]")
     parser.set_defaults(verbose=True)
     (options, args) = parser.parse_args()
 
-    generate_dockerfiles(options.output_dir, [options.configuration_file])
+    generate_dockerfiles(options.output_dir, [options.configuration_file], options.tag_separator)
 
 
 if __name__ == '__main__':
