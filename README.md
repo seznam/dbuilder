@@ -60,6 +60,7 @@ docker run --rm \
     - DBUILDER_BUILD_CMD - [default="dpkg-buildpackage -j${NCPUS}"]
     - LOCAL_REPO_PRIORITY - sets [Pin-Priority](https://wiki.debian.org/AptPreferences) to local repository created using /dbuilder/additional_packages volume.
     - BUILD_PACKAGES_FILE_PATH - [default="../"]
+    - BUILD_SOURCES_PATH - [default="/dbuilder/sources"]
 
 ## For maintaners
 ## Prepare

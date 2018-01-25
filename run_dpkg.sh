@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 
-cp -r /dbuilder/sources/. -t /dbuilder/build/
+if [ ${BUILD_SOURCES_PATH} != "/dbuilder/build" ]; then
+    cp -r ${BUILD_SOURCES_PATH}/. -t /dbuilder/build/
+fi
 cd /dbuilder/build/${DBUILDER_SUBDIR}
 
 # if some deb files exist in additional_packages directory, we create a trivial
@@ -47,4 +49,4 @@ if [ -d /dbuilder/postinstall.d ]; then
 fi
 
 chmod 644 ${BUILD_PACKAGES_FILE_PATH}*.deb
-cp ${BUILD_PACKAGES_FILE_PATH}*.deb /dbuilder/sources/${DBUILDER_SUBDIR}
+cp ${BUILD_PACKAGES_FILE_PATH}*.deb ${BUILD_SOURCES_PATH}/${DBUILDER_SUBDIR}
